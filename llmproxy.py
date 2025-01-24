@@ -28,7 +28,7 @@ def generate(
         'query': query,
         'temperature': temperature,
         'lastk': lastk,
-        'session_id': None,
+        'session_id': session_id,
     }
 
     msg = None
