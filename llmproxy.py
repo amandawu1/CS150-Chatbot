@@ -14,7 +14,10 @@ def generate(
 	query: str,
 	temperature: float | None = None,
 	lastk: int | None = None,
-	session_id: str | None = None
+	session_id: str | None = None,
+    rag_threshold: float | None = 0.5,
+    rag_usage: bool | None = False,
+    rag_k: int | None = 0
 	):
 	
 
@@ -29,6 +32,9 @@ def generate(
         'temperature': temperature,
         'lastk': lastk,
         'session_id': session_id,
+        'rag_threshold': rag_threshold,
+        'rag_usage': rag_usage,
+        'rag_k': rag_k
     }
 
     msg = None
@@ -37,7 +43,8 @@ def generate(
         response = requests.post(end_point, headers=headers, json=request)
 
         if response.status_code == 200:
-            msg = json.loads(response.text)['result']
+            res = json.loads(response.text)
+            msg = {'response':res['result'],'rag_context':res['rag_context']}
         else:
             msg = f"Error: Received response code {response.status_code}"
     except requests.exceptions.RequestException as e:
