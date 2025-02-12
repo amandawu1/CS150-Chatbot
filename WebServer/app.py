@@ -24,18 +24,18 @@ def main():
 
     print(f"Message from {user} : {message}")
 
-    # Generate a response (you can integrate with AI/chatbot here)
+    # Generate a response using LLMProxy
     response_text = generate(
         model='4o-mini',
-        system='answer my question and tell me related topics',
+        system='answer my question and add keywords',
         query= message,
         temperature=0.0,
         lastk=0,
         session_id='GenericSession'
     )
 
-    # Send response back to Rocket.Chat
-    print(response_text[0:10])
+    # Send response back
+    print(response_text)
 
     return jsonify({"text": response_text})
     

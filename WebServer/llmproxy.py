@@ -4,8 +4,8 @@ import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 # Read proxy config from environment
-end_point = os.environ.get("proxy_endpoint")
-api_key = os.environ.get("api_key")
+end_point = os.environ.get("endPoint")
+api_key = os.environ.get("apiKey")
 
 def generate(
 	model: str,
