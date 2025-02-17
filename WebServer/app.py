@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-   return 'Hello from Koyeb - you reached the main page!'
+   return jsonify({"text":'Hello from Koyeb - you reached the main page!'})
 
 @app.route('/query', methods=['POST'])
 def main():
@@ -25,7 +25,7 @@ def main():
     print(f"Message from {user} : {message}")
 
     # Generate a response using LLMProxy
-    response_text = generate(
+    response = generate(
         model='4o-mini',
         system='answer my question and add keywords',
         query= message,
@@ -34,6 +34,8 @@ def main():
         session_id='GenericSession'
     )
 
+    response_text = response['response']
+    
     # Send response back
     print(response_text)
 
