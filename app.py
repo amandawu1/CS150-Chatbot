@@ -156,7 +156,7 @@ def main():
     # Generate a response using LLMProxy
     response = generate(
         model='4o-mini',
-        system=Classify the query as asking for a stock recommendation or not.",
+        system="Classify the query as asking for a stock recommendation or not.",
         query= message,
         temperature=0.0,
         lastk=0,
