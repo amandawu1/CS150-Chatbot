@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Ratings</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: rgb(8, 13, 47);
+            background-color: rgb(236, 236, 236);
+            padding-top: 40px;
+        }
+    
+        .gsc-input {
+            width: 300px;
+        }
+        .prompt {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            width: 30%;
+            margin-top: 10px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 15px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 200px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        } 
+
+        .results {
+            display: none; /* Hide the results box initially */
+            flex-direction: column;
+            align-items: center;
+            width: 40%;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Search for a Tufts Professor's Ratings</h2>
+    <div class="prompt">
+        <input type="text" id="professorName" placeholder="Enter professor's name">
+        <button onclick="searchProfessor()">Search</button>
+    </div>
+    <div id="results" class="results"></div>
+    <div class="gcse-search"></div>
+
+    <script>
+        function searchProfessor() {
+            let professor = document.getElementById("professorName").value;
+
+            fetch(`/search?professor=${encodeURIComponent(professor)}`)
+                .then(response => response.json()) 
+                .then(data => {
+                    let resultsDiv = document.getElementById("results");
+                    resultsDiv.innerHTML = "";
+                    if (data.error) {
+                        resultsDiv.innerHTML = `<p>${data.error}</p>`;
+                        resultsDiv.style.display = "block"; // Show the results box
+                        return;
+                    }
+                    let title = document.createElement("h3");
+                    title.textContent = data.title;
+                    let link = document.createElement("a");
+                    link.href = data.link;
+                    link.textContent = "View Profile";
+                    let snippet = document.createElement("p");
+                    snippet.textContent = data.snippet;
+                    resultsDiv.appendChild(title);
+                    resultsDiv.appendChild(link);
+                    resultsDiv.appendChild(snippet);
+                    
+                    if (data.star_ratings) {
+                        let ratings = document.createElement("p");
+                        ratings.textContent = `Star Ratings: ${data.star_ratings} / 5`;
+                        resultsDiv.appendChild(ratings);
+                    }
+
+                    resultsDiv.style.display = "block"; 
+                })
+                .catch(error => console.error("Error fetching data:", error));
+        }
+    </script>
+</body>
+</html>
