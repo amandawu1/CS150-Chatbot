@@ -156,7 +156,7 @@ def main():
     # Generate a response using LLMProxy
     response = generate(
         model='4o-mini',
-        system="answer the question",
+        system='answer my question and add keywords',
         query= message,
         temperature=0.0,
         lastk=0,
