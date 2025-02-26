@@ -35,17 +35,30 @@ class OrchestratorAgent:
 
         # 2. Check if user is new to provide an introduction
         if not session["has_introduced"]:
-            session["has_introduced"] = True
-            introduction = (
-                "Hello! I’m your financial assistant bot. "
-                "I can help summarize information, answer queries, and fetch live data. "
-                "How can I help you today?"
-            )
-            # Save user’s message to history
-            session["history"].append({"role": "user", "content": message})
-            # Save the introduction to history
-            session["history"].append({"role": "assistant", "content": introduction})
-            return introduction
+            if msg_lower in ["hi", "hello", "hey", "hola"]:
+                session["has_introduced"] = True
+                # Save user’s message to history
+                session["history"].append({"role": "user", "content": message})
+
+                introduction = (
+                    "Hello! I’m your financial assistant bot. "
+                    "I can help summarize information, answer queries, and fetch live data. "
+                    "How can I help you today?"
+                )
+                session["history"].append({"role": "assistant", "content": introduction})
+                return introduction
+            else:
+                # If user is new but didn't explicitly say "hi", still introduce
+                session["has_introduced"] = True
+                session["history"].append({"role": "user", "content": message})
+
+                introduction = (
+                    "Hello! I’m your financial assistant bot. "
+                    "I can help summarize information, answer queries, and fetch live data. "
+                    "How can I help you today?"
+                )
+                session["history"].append({"role": "assistant", "content": introduction})
+                return introduction
 
         # 3. Optionally ask follow-up questions if the last response indicated we needed more info
         if session["pending_followup"]:
